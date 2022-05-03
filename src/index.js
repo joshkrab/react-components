@@ -4,11 +4,13 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// Звертаємось до біліотекі ReactDOM, та визиваємо у неї метод render
 const root = ReactDOM.createRoot(document.getElementById('root'));
+// Рендеремо компонент App та складуємо його в компонент root
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+   <React.StrictMode>
+      <App />
+   </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
