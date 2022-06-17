@@ -1,32 +1,28 @@
-import React from 'react';
-import TodoList from './Todo/TodoList';
+import React, { useState } from 'react';
+import ClassCounter from './components/ClassCounter';
+import Counter from './components/Counter';
 
 function App() {
-   // Додавання динамічності
-   let todos = [
-      { id: 1, completed: false, title: 'Купити хліб' },
-      { id: 2, completed: false, title: 'Купити масло' },
-      { id: 3, completed: false, title: 'Купити молоко' },
-   ];
-
-   function toggleTodo(id) {
-      console.log('todo id', id);
-      todos = todos.map((todo) => {
-         if (todo.id === id) {
-            todo.completed = !todo.completed;
-         }
-         return todo;
-      });
-   }
+   // Створюємо стан для інпуту:
+   const [value, setValue] = useState('Text in input');
 
    return (
-      <div className="wrapper">
-         <h1>React Hello!</h1>
+      <div className="app">
+         {/* Виведення змінної: */}
+         <h1>{value}</h1>
+         <input
+            type="text"
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+         />
 
-         {/* Відобразити масив в компоненті TodoList: позначити яку властивість приймаємо */}
-         <TodoList todos={todos} onToggle={toggleTodo} />
+         {/* При введенні назви компонента в < /> має само імпортувати компонент: */}
+         <Counter />
+         {/* Компоненти можна дублювати скільки треба, та вони будуть незалежні */}
+         <Counter />
+
+         <ClassCounter />
       </div>
    );
 }
-
 export default App;
