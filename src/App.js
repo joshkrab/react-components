@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import ClassCounter from './components/ClassCounter';
 import Counter from './components/Counter';
 import PostList from './components/PostList';
@@ -16,6 +16,7 @@ function App() {
       { id: 3, title: 'javaScript 3', body: 'description' },
       { id: 4, title: 'javaScript 4', body: 'description' },
    ]);
+
    const [posts2, setPosts2] = useState([
       { id: 1, title: 'Python', body: 'description' },
       { id: 2, title: 'Python 2', body: 'description' },
@@ -23,17 +24,25 @@ function App() {
       { id: 4, title: 'Python 4', body: 'description' },
    ]);
 
-   // Створюємо стан і функцію для додавання постів:
-   const [title, setTitle] = useState('');
-   const bodyInputRef = useRef(); // Хук звертається до ДОМ елемента
+   // Створюємо стан для першого інпуту:
+   // const [title, setTitle] = useState('');
 
-   // Створюємо стан для другого інпута:
-   const [body, setBody] = useState('');
+   // Для другого інпуту приклад іншого хука:
+   // const bodyInputRef = useRef(); // Хук звертається до ДОМ елемента якось по адресі
+
+   // Створюємо стан для третього інпута:
+   // const [body, setBody] = useState('');
+
+   // Створюємо стан одразу для усіх інпутів:
+   const [post, setPost] = useState({ title: '', body: '' });
+
+   // Функція додавання поста:
    const addNewPost = (event) => {
       event.preventDefault();
-      console.log(title);
-      console.log(bodyInputRef.current.value);
-      console.log(body);
+
+      // Додаємо пост в кінець існуючого масиву постів та додаємо унікальний id(дату в мілісекундах):
+      setPosts2([...posts2, { ...post, id: Date.now() }]);
+      setPost({ title: '', body: '' });
    };
 
    return (
@@ -53,26 +62,43 @@ function App() {
          <ClassCounter />
 
          <PostList posts={posts} title="Пости про JS" />
+         <button
+            onClick={(e) => {
+               e.preventDefault();
+               setPosts(posts);
+            }}
+         >
+            Add Js Post
+         </button>
+
+         {/* Форма додавання --------------------------------------------------------------------- */}
          <form>
             {/* Керований компонент та двобічне зв'язування*/}
             <MyInput
-               onChange={(event) => setTitle(event.target.value)}
+               // Тепер ми приймаємо весь об'єкт, та перезаписуємо/додаємо конкретну властивість:
+               // Тобто змінюємо потрібну властивість, а весь об'єкт залишаємо як був
+               onChange={(event) =>
+                  setPost({ ...post, title: event.target.value })
+               }
                type="text"
                placeholder="Назва поста"
-               value={title}
+               value={post.title}
             />
+
             {/* Некерований компонент: */}
-            <MyInput ref={bodyInputRef} type="text" placeholder="Опис поста" />
+            {/* <MyInput ref={bodyInputRef} type="text" placeholder="Опис поста" /> */}
 
             {/* Але все ж таки залишаємо його керованим */}
             <MyInput
                type="text"
                placeholder="Опис поста"
-               value={body}
-               onChange={(event) => setBody(event.target.value)}
+               value={post.body}
+               onChange={(event) =>
+                  setPost({ ...post, body: event.target.value })
+               }
             />
 
-            <MyButton onClick={addNewPost}>Створити пост</MyButton>
+            <MyButton onClick={addNewPost}>Додати пост</MyButton>
          </form>
          <PostList posts={posts2} title="Пости про Python" />
       </div>
