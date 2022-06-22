@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import ClassCounter from './components/ClassCounter';
 import Counter from './components/Counter';
+import PostForm from './components/PostForm';
 import PostList from './components/PostList';
-import MyButton from './components/UI/button/MyButton';
-import MyInput from './components/UI/input/MyInput';
 import './styles/App.css';
 
 function App() {
    // Створюємо стан для інпуту:
    const [value, setValue] = useState('Text in input');
-   // Створюємо стан для постів:
+
+   // Створюємо стани для постів:
    const [posts, setPosts] = useState([
       { id: 1, title: 'javaScript', body: 'description' },
       { id: 2, title: 'javaScript 2', body: 'description' },
@@ -33,16 +33,8 @@ function App() {
    // Створюємо стан для третього інпута:
    // const [body, setBody] = useState('');
 
-   // Створюємо стан одразу для усіх інпутів:
-   const [post, setPost] = useState({ title: '', body: '' });
-
-   // Функція додавання поста:
-   const addNewPost = (event) => {
-      event.preventDefault();
-
-      // Додаємо пост в кінець існуючого масиву постів та додаємо унікальний id(дату в мілісекундах):
-      setPosts2([...posts2, { ...post, id: Date.now() }]);
-      setPost({ title: '', body: '' });
+   const createPost = (newPost) => {
+      setPosts2([...posts2, newPost]);
    };
 
    return (
@@ -72,34 +64,8 @@ function App() {
          </button>
 
          {/* Форма додавання --------------------------------------------------------------------- */}
-         <form>
-            {/* Керований компонент та двобічне зв'язування*/}
-            <MyInput
-               // Тепер ми приймаємо весь об'єкт, та перезаписуємо/додаємо конкретну властивість:
-               // Тобто змінюємо потрібну властивість, а весь об'єкт залишаємо як був
-               onChange={(event) =>
-                  setPost({ ...post, title: event.target.value })
-               }
-               type="text"
-               placeholder="Назва поста"
-               value={post.title}
-            />
+         <PostForm create={createPost} />
 
-            {/* Некерований компонент: */}
-            {/* <MyInput ref={bodyInputRef} type="text" placeholder="Опис поста" /> */}
-
-            {/* Але все ж таки залишаємо його керованим */}
-            <MyInput
-               type="text"
-               placeholder="Опис поста"
-               value={post.body}
-               onChange={(event) =>
-                  setPost({ ...post, body: event.target.value })
-               }
-            />
-
-            <MyButton onClick={addNewPost}>Додати пост</MyButton>
-         </form>
          <PostList posts={posts2} title="Пости про Python" />
       </div>
    );
