@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ClassCounter from './components/ClassCounter';
 import Counter from './components/Counter';
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
+import MyInput from './components/UI/input/MyInput';
 import MySelect from './components/UI/select/MySelect';
 import './styles/App.css';
 
@@ -41,22 +42,50 @@ function App() {
       setPosts2(posts2.filter((p) => p.id !== post.id));
    };
 
-   // Створюємо стан для сортування:
+   // Створюємо стан для сортування: ------------------------------------------------------------------------------------------------
    const [selectedSort, setSelectedSort] = useState('');
-   // Функція сортування:
+
+   const sortedPosts = useMemo(() => {
+      console.log('ВІДПРАЦЮВАЛА ФУНКЦІЯ СОРТУВАННЯ');
+      // Якщо вже є цей стан - не пустий рядок за замовчуванням, то повертаємо відсортирований масив
+      if (selectedSort) {
+         return [...posts2].sort((a, b) =>
+            a[selectedSort].localeCompare(b[selectedSort])
+         );
+      }
+      // Або звичайний первичний масив стан:
+      return posts2;
+      // Перезаписуємо сортування в масив при зміні цих змінних:
+   }, [selectedSort, posts2]);
+
+   // Функція сортування: тепер ми просто записуємо значення в стан
    const sortPosts = (sort) => {
       // sort повертає event.target.value, тобто рядок 'title' або 'body'
-
       setSelectedSort(sort); // Записали в стан 'title' або 'body'
 
       // Функція .sort() не повертає масив, а мутує поточний, а стан напряму змінювати не можна
-      // Тому розвертаємо пости в новий масив та сортуємо вже його
+      // Тому розвертаємо пости в новий масив ([...posts2].) та сортуємо вже його
       // Тобто ми змінюємо копію масива, а не стан напряму
       // Функція .sort() приймає аргументами два елемента масива
 
       // .localeCompare() - порівняння рядків, повертає число по якому сортує
-      setPosts2([...posts2].sort((a, b) => a[sort].localeCompare(b[sort])));
+      // setPosts2([...posts2].sort((a, b) => a[sort].localeCompare(b[sort]))); - перенесли в константу вище
    };
+
+   // ---------------- Пошук ----------------------------------------------------------------------------------------------------
+   // Стан для пошуку:
+   const [searchQuery, setSearchQuery] = useState('');
+   // function search(value) {
+   //    setSearchQuery(value);
+   //    console.log(searchQuery);
+   // }
+
+   const sortAndSearchPosts = useMemo(() => {
+      // По пошуковому рядку ми фільтруємо масив
+      return sortedPosts.filter((post) =>
+         post.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+   }, [searchQuery, sortedPosts]);
 
    return (
       <div className="app">
@@ -83,27 +112,39 @@ function App() {
          >
             Add Js Post
          </button>
+
          <hr style={{ margin: '15px 0' }} />
 
          {/* Форма додавання --------------------------------------------------------------------- */}
          <PostForm create={createPost} />
+
          <hr style={{ margin: '15px 0' }} />
+
+         {/* Інпут для пошуку --------------------------------------------------------------------- */}
+         <MyInput
+            value={searchQuery}
+            // При зміні записуємо в стан, а при зміні стану записуємо новий масив для PostList в sortAndSearchPosts
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="Пошук..."
+         />
+
          <MySelect
             defaultValue={'Сортування'}
+            // Подаємо опції для малювання опцій тегами методом map
             options={[
                { value: 'title', name: 'По назві' },
                { value: 'body', name: 'По опису' },
             ]}
             value={selectedSort} // Записуємо в стан 'title' або 'body'
-            onChange={sortPosts}
+            onChange={sortPosts} // Передаємо як посилання в компонент, і звідти запускаємо тут :)
          />
 
          {/* Додаємо умову, якщо є масив, тоді малюємо компонент, інакше повідомлення */}
-         {posts2.length ? (
+         {sortAndSearchPosts.length ? (
             <PostList
                // Передаємо функцію як посилання, беж дужок ()
                remove={removePost}
-               posts={posts2}
+               posts={sortAndSearchPosts}
                title="Пости про Python"
             />
          ) : (
