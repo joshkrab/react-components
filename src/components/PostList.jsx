@@ -3,6 +3,10 @@ import React from 'react';
 import PostItem from './PostItem';
 
 const PostList = ({ remove, posts, title }) => {
+   //  Додаємо умову, якщо є масив, тоді малюємо компонент, інакше повідомлення:
+   if (!posts.length) {
+      return <h2 style={{ textAlign: 'center' }}>Пости не знайдені!</h2>;
+   }
    return (
       <div>
          {/* Робота зі стилями: */}
