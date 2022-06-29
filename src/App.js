@@ -4,6 +4,8 @@ import Counter from './components/Counter';
 import PostFilter from './components/PostFilter';
 import PostForm from './components/PostForm';
 import PostList from './components/PostList';
+import MyButton from './components/UI/button/MyButton';
+import MyModal from './components/UI/modal/MyModal';
 
 import './styles/App.css';
 
@@ -35,6 +37,7 @@ function App() {
 
    const createPost = (newPost) => {
       setPosts2([...posts2, newPost]);
+      setModal(false);
    };
 
    const removePost = (post) => {
@@ -47,6 +50,9 @@ function App() {
 
    // Замість двох станів searchQuery та selectedSort створюємо один загальний:
    const [filter, setFilter] = useState({ sort: '', query: '' });
+
+   // Створюємо стан для відображення модального вікна:
+   const [modal, setModal] = useState(false);
 
    const sortedPosts = useMemo(() => {
       console.log('ВІДПРАЦЮВАЛА ФУНКЦІЯ СОРТУВАННЯ');
@@ -88,6 +94,7 @@ function App() {
       return sortedPosts.filter((post) =>
          post.title.toLowerCase().includes(filter.query.toLowerCase())
       );
+      // Перезаписує масив при зміні цих змінних:
    }, [filter.query, sortedPosts]);
 
    return (
@@ -99,7 +106,6 @@ function App() {
             value={value}
             onChange={(event) => setValue(event.target.value)}
          />
-
          {/* При введенні назви компонента в < /> має само імпортувати компонент: */}
          <Counter />
          {/* Компоненти можна дублювати скільки треба, та вони будуть незалежні */}
@@ -117,17 +123,23 @@ function App() {
          </button> */}
 
          <hr style={{ margin: '15px 0' }} />
+         <MyButton onClick={() => setModal(true)}>Додати пост</MyButton>
 
-         {/* Форма додавання --------------------------------------------------------------------- */}
-         <PostForm create={createPost} />
+         <MyModal visible={modal} setVisible={setModal}>
+            {/* Форма додавання постів --------------------------------------------------------------------------------------------- */}
+            <PostForm create={createPost} />
+         </MyModal>
 
-         <hr style={{ margin: '15px 0' }} />
+         {/* <hr style={{ margin: '15px 0' }} /> */}
 
+         {/* Компонент сортування та інпут фільтрації */}
          <PostFilter filter={filter} setFilter={setFilter} />
 
+         {/* Компонент малювання постів */}
          <PostList
             // Передаємо функцію як посилання, беж дужок ()
             remove={removePost}
+            // Малює миттєво вже отсортований масив, або селектом або пошуком
             posts={sortAndSearchPosts}
             title="Пости про Python"
          />

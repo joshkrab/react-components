@@ -21,3 +21,25 @@
    justify-content: space-between;
    align-items: center;
 }
+
+.remove-btn {
+   margin-right: 0.5rem;
+}
+
+/* Початок анімації: */
+.post-enter {
+   transform: translate(-350px);
+}
+/* При додавання елемента */
+.post-enter-active {
+   transform: translate(0px);
+   transition: all 500ms ease-in;
+}
+.post-exit {
+   transform: translate(0px);
+}
+/* При видаленні елемента: */
+.post-exit-active {
+   transform: translate(-350px);
+   transition: all 500ms ease-in;
+}

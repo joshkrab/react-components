@@ -1,0 +1,25 @@
+.myModal {
+   position: fixed;
+   /* Розтягуємо на весь екран, та додаємо затемненя фону навкруги нашого контентк,
+    який у нас центрується флексом */
+   top: 0;
+   bottom: 0;
+   right: 0;
+   left: 0;
+   display: none;
+   background: rgb(0, 0, 0, 0.5);
+}
+
+.myModalContent {
+   padding: 25px;
+   background: #fff;
+   border-radius: 16px;
+   min-width: 250px;
+   /* text-align: center; */
+}
+
+.myModal.active {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
