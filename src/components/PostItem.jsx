@@ -7,7 +7,7 @@ const PostItem = (props) => {
    return (
       <div className="post">
          <div className="post__content">
-            <strong>
+            <strong style={{ fontSize: '20px', fontWeight: '800' }}>
                {props.number}.{props.post.title}
             </strong>
             <div>{props.post.body}</div>

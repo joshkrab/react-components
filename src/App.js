@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 // import ClassCounter from './components/ClassCounter';
 import Counter from './components/Counter';
 import PostFilter from './components/PostFilter';
@@ -6,8 +6,9 @@ import PostForm from './components/PostForm';
 import PostList from './components/PostList';
 import MyButton from './components/UI/button/MyButton';
 import MyModal from './components/UI/modal/MyModal';
-
+import { usePosts } from './hooks/usePosts';
 import './styles/App.css';
+import axios from 'axios';
 
 function App() {
    // Створюємо стан для інпуту:
@@ -40,6 +41,15 @@ function App() {
       setModal(false);
    };
 
+   async function fetchPosts() {
+      // Записуємо в змінну результат запиту:
+      // GET запит на отримання даних:
+      const response = await axios.get(
+         'https://jsonplaceholder.typicode.com/posts'
+      );
+      setPosts2(response.data);
+   }
+
    const removePost = (post) => {
       // .filter() - повертає новий масив по заданій умові:
       setPosts2(posts2.filter((p) => p.id !== post.id));
@@ -53,19 +63,6 @@ function App() {
 
    // Створюємо стан для відображення модального вікна:
    const [modal, setModal] = useState(false);
-
-   const sortedPosts = useMemo(() => {
-      console.log('ВІДПРАЦЮВАЛА ФУНКЦІЯ СОРТУВАННЯ');
-      // Якщо вже є цей стан - не пустий рядок за замовчуванням, то повертаємо відсортирований масив
-      if (filter.sort) {
-         return [...posts2].sort((a, b) =>
-            a[filter.sort].localeCompare(b[filter.sort])
-         );
-      }
-      // Або звичайний первичний масив стан:
-      return posts2;
-      // Перезаписуємо сортування в масив при зміні цих змінних:
-   }, [filter.sort, posts2]);
 
    // Функція сортування: тепер ми просто записуємо значення в стан - вже не потрібна, використовуючи стан filter
    //const sortPosts = (sort) => {
@@ -89,13 +86,8 @@ function App() {
    //    console.log(searchQuery);
    // }
 
-   const sortAndSearchPosts = useMemo(() => {
-      // По пошуковому рядку ми фільтруємо масив
-      return sortedPosts.filter((post) =>
-         post.title.toLowerCase().includes(filter.query.toLowerCase())
-      );
-      // Перезаписує масив при зміні цих змінних:
-   }, [filter.query, sortedPosts]);
+   // Створюємо нову змінну після перенесення фільтрації та сортування в наш хук usePosts
+   const sortAndSearchPosts = usePosts(posts2, filter.sort, filter.query);
 
    return (
       <div className="app">
@@ -113,16 +105,13 @@ function App() {
          {/* <ClassCounter /> */}
 
          {/* <PostList posts={posts} title="Пости про JS" />
-         <button
-            onClick={(e) => {
+         <button onClick={(e) => {
                e.preventDefault();
                setPosts(posts);
-            }}
-         >
-            Add Js Post
-         </button> */}
+            }}> Add Js Post </button> */}
 
          <hr style={{ margin: '15px 0' }} />
+         <button onClick={fetchPosts}>GET POSTS</button>
          <MyButton onClick={() => setModal(true)}>Додати пост</MyButton>
 
          <MyModal visible={modal} setVisible={setModal}>
