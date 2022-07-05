@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import ClassCounter from './components/ClassCounter';
 import Counter from './components/Counter';
 import PostFilter from './components/PostFilter';
@@ -8,7 +8,10 @@ import MyButton from './components/UI/button/MyButton';
 import MyModal from './components/UI/modal/MyModal';
 import { usePosts } from './hooks/usePosts';
 import './styles/App.css';
-import axios from 'axios';
+
+import PostService from './API/PostService';
+import Loader from './components/UI/loader/Loader';
+import { useFetching } from './hooks/useFetching';
 
 function App() {
    // Створюємо стан для інпуту:
@@ -20,12 +23,15 @@ function App() {
    //    { id: 2, title: 'javaScript 2', body: 'description' },
    // ]);
 
-   const [posts2, setPosts2] = useState([
-      { id: 1, title: 'Python 1', body: 'description 56' },
-      { id: 2, title: 'Python 2', body: 'description 55' },
-      { id: 3, title: 'Python 3', body: 'description 54' },
-      { id: 4, title: 'Python 4', body: 'description 53' },
-   ]);
+   const [posts2, setPosts2] = useState([]);
+   //    { id: 1, title: 'Python 1', body: 'description 56' },
+   //    { id: 2, title: 'Python 2', body: 'description 55' },
+   //    { id: 3, title: 'Python 3', body: 'description 54' },
+   //    { id: 4, title: 'Python 4', body: 'description 53' },
+   // ]);
+
+   // Створюємо стан для оформлення загрузки постів, крутілку тощо...
+   // const [isPostLoading, setIsPostLoading] = useState(false); - переписали в хук
 
    // Створюємо стан для першого інпуту:
    // const [title, setTitle] = useState('');
@@ -41,14 +47,19 @@ function App() {
       setModal(false);
    };
 
-   async function fetchPosts() {
-      // Записуємо в змінну результат запиту:
-      // GET запит на отримання даних:
-      const response = await axios.get(
-         'https://jsonplaceholder.typicode.com/posts'
-      );
-      setPosts2(response.data);
-   }
+   // По натисканню на кнопку ми записуємо в стан постів по фетч запиту:  - перенесли в хук
+   //  async function fetchPosts() {
+   // setIsPostLoading(true);
+
+   // Записуємо в змінну результат запиту:
+   // GET запит на отримання даних:
+
+   // setTimeout(async () => {
+   //    const posts = await PostService.getAll();
+   //    setPosts2(posts);
+   //    setIsPostLoading(false);
+   // }, 2000);
+   // }
 
    const removePost = (post) => {
       // .filter() - повертає новий масив по заданій умові:
@@ -89,6 +100,21 @@ function App() {
    // Створюємо нову змінну після перенесення фільтрації та сортування в наш хук usePosts
    const sortAndSearchPosts = usePosts(posts2, filter.sort, filter.query);
 
+   // Визиваємо наш хук, та передаємо в нього колбек функцію:
+   // В цей масив змінних, запишеться масив з 3х елементів, який поверне функція.
+   const [fetchPosts, isPostLoading, postError] = useFetching(async () => {
+      console.log('Записали фетч');
+      const posts = await PostService.getAll();
+      setPosts2(posts);
+   });
+
+   // Додаємо хук для передзавантаження постів: ---------------------------------------------------------------------------------------------------
+
+   useEffect(() => {
+      console.log('Хука спрацювала тільки раз з пустими залежностями []');
+      fetchPosts();
+   }, []);
+
    return (
       <div className="app">
          {/* Виведення змінної: */}
@@ -103,7 +129,6 @@ function App() {
          {/* Компоненти можна дублювати скільки треба, та вони будуть незалежні */}
          {/* <Counter /> */}
          {/* <ClassCounter /> */}
-
          {/* <PostList posts={posts} title="Пости про JS" />
          <button onClick={(e) => {
                e.preventDefault();
@@ -112,26 +137,34 @@ function App() {
 
          <hr style={{ margin: '15px 0' }} />
          <button onClick={fetchPosts}>GET POSTS</button>
+         <hr style={{ margin: '15px 0' }} />
+
          <MyButton onClick={() => setModal(true)}>Додати пост</MyButton>
 
          <MyModal visible={modal} setVisible={setModal}>
             {/* Форма додавання постів --------------------------------------------------------------------------------------------- */}
             <PostForm create={createPost} />
          </MyModal>
-
          {/* <hr style={{ margin: '15px 0' }} /> */}
-
          {/* Компонент сортування та інпут фільтрації */}
          <PostFilter filter={filter} setFilter={setFilter} />
 
-         {/* Компонент малювання постів */}
-         <PostList
-            // Передаємо функцію як посилання, беж дужок ()
-            remove={removePost}
-            // Малює миттєво вже отсортований масив, або селектом або пошуком
-            posts={sortAndSearchPosts}
-            title="Пости про Python"
-         />
+         {/* Умова перевірки на помилку: */}
+         {postError && <h1>Сталася помилка: {postError}</h1>}
+
+         {/* Додаємо умову малювання крутілкі завантаження */}
+         {isPostLoading ? (
+            <Loader />
+         ) : (
+            // Компонент малювання постів
+            <PostList
+               // Передаємо функцію як посилання, беж дужок ()
+               remove={removePost}
+               // Малює миттєво вже отсортований масив, або селектом або пошуком
+               posts={sortAndSearchPosts}
+               title="Пости про Python"
+            />
+         )}
       </div>
    );
 }
