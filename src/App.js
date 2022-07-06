@@ -12,6 +12,8 @@ import './styles/App.css';
 import PostService from './API/PostService';
 import Loader from './components/UI/loader/Loader';
 import { useFetching } from './hooks/useFetching';
+import { getPageCount } from './utils/pages';
+import Pagination from './components/UI/pagination/Pagination';
 
 function App() {
    // Створюємо стан для інпуту:
@@ -75,6 +77,11 @@ function App() {
    // Створюємо стан для відображення модального вікна:
    const [modal, setModal] = useState(false);
 
+   // Створюємо стани для кількості постів та сторінок:
+   const [totalPages, setTotalPages] = useState(0);
+   const [limit, setLimit] = useState(10);
+   const [page, setPage] = useState(1);
+
    // Функція сортування: тепер ми просто записуємо значення в стан - вже не потрібна, використовуючи стан filter
    //const sortPosts = (sort) => {
    // sort повертає event.target.value, тобто рядок 'title' або 'body'
@@ -104,16 +111,24 @@ function App() {
    // В цей масив змінних, запишеться масив з 3х елементів, який поверне функція.
    const [fetchPosts, isPostLoading, postError] = useFetching(async () => {
       console.log('Записали фетч');
-      const posts = await PostService.getAll();
-      setPosts2(posts);
+      const response = await PostService.getAll(limit, page);
+      setPosts2(response.data);
+      const totaLCount = response.headers['x-total-count'];
+      setTotalPages(getPageCount(totaLCount, limit));
    });
+   console.log(totalPages);
 
    // Додаємо хук для передзавантаження постів: ---------------------------------------------------------------------------------------------------
 
    useEffect(() => {
       console.log('Хука спрацювала тільки раз з пустими залежностями []');
       fetchPosts();
-   }, []);
+   }, [page]);
+
+   // Функція зміни сторінки:
+   const changePage = (page) => {
+      setPage(page);
+   };
 
    return (
       <div className="app">
@@ -165,6 +180,11 @@ function App() {
                title="Пости про Python"
             />
          )}
+         <Pagination
+            totalPages={totalPages}
+            page={page}
+            changePage={changePage}
+         />
       </div>
    );
 }
