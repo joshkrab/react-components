@@ -1,10 +1,10 @@
 // rfc
 import React from 'react';
-import { getPagesArray } from '../../../utils/pages';
+import { usePages } from '../../../utils/pages';
 
 const Pagination = ({ totalPages, page, changePage }) => {
    // Визиваємо функцію будування масива сторінок:
-   let pagesArray = getPagesArray(totalPages);
+   let pagesArray = usePages(totalPages);
 
    return (
       <div className="page__wrapper">
