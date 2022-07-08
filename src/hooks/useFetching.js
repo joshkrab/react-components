@@ -10,7 +10,7 @@ export const useFetching = (callback) => {
    const fetching = async () => {
       try {
          setIsLoading(true);
-         await callback();
+         await callback(); // Запускаємо функцію яку приймаємо в колбекі аргументі
       } catch (error) {
          setError(error.message);
       } finally {
