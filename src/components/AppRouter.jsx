@@ -1,22 +1,25 @@
 // rfc
-import React from 'react';
+import React, { useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
-
-import About from '../pages/About';
-import Login from '../pages/Login';
-import PostIdPage from '../pages/PostIdPage';
-import Posts from '../pages/Posts';
+import { AuthContext } from '../context';
+// import Login from '../pages/Login';
 import { privateRoutes, publicRoutes } from '../router/routes';
+import Loader from './UI/loader/Loader';
 
 const AppRouter = () => {
    // Змінна чи авторизован юзер:
-   const isAuth = true;
+   const { isAuth, isLoading } = useContext(AuthContext);
+   console.log(isAuth);
+
+   if (isLoading) {
+      return <Loader />;
+   }
    return (
       <Routes>
          {/* <Route path="about" element={<About />}></Route>
          <Route exact path="posts" element={<Posts />}></Route>
          <Route exact path="posts/:id" element={<PostIdPage />}></Route> */}
-         <Route path="*" element={<Login />}></Route>
+
          {isAuth
             ? privateRoutes.map((route) => (
                  <Route
@@ -34,6 +37,7 @@ const AppRouter = () => {
                     key={route.path}
                  ></Route>
               ))}
+         {/* <Route path="*" element={<Login />}></Route> */}
       </Routes>
    );
 };

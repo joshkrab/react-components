@@ -5,12 +5,17 @@ import Posts from '../pages/Posts';
 
 export const privateRoutes = [
    {
+      path: '/posts',
+      component: Posts,
+      exact: true,
+   },
+   {
       path: '/about',
       component: About,
       exact: true,
    },
    {
-      path: '/posts',
+      path: '*',
       component: Posts,
       exact: true,
    },
@@ -24,6 +29,11 @@ export const privateRoutes = [
 export const publicRoutes = [
    {
       path: '/login',
+      component: Login,
+      exact: true,
+   },
+   {
+      path: '*',
       component: Login,
       exact: true,
    },

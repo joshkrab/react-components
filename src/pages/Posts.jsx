@@ -7,12 +7,13 @@ import PostList from '../components/PostList';
 import MyButton from '../components/UI/button/MyButton';
 import MyModal from '../components/UI/modal/MyModal';
 import { usePosts } from '../hooks/usePosts';
-
 import PostService from '../API/PostService';
 import Loader from '../components/UI/loader/Loader';
 import { useFetching } from '../hooks/useFetching';
 import { getPageCount } from '../utils/pages';
 import Pagination from '../components/UI/pagination/Pagination';
+import { useRef } from 'react';
+import { useObserver } from '../hooks/useObserver';
 
 function Posts() {
    // Створюємо стан для інпуту:
@@ -107,21 +108,33 @@ function Posts() {
    // Створюємо нову змінну після перенесення фільтрації та сортування в наш хук usePosts
    const sortAndSearchPosts = usePosts(posts2, filter.sort, filter.query);
 
+   // Отримуємо останній елемент пост:
+   const lastElement = useRef();
+
+   console.log(lastElement);
+
    // Визиваємо наш хук, та передаємо в нього колбек функцію:
    // В цей масив змінних, запишеться масив з 3х елементів, який поверне функція.
    const [fetchPosts, isPostLoading, postError] = useFetching(async () => {
       console.log('Записали фетч');
       const response = await PostService.getAll(limit, page);
-      setPosts2(response.data);
+      //setPosts2(response.data);
+      // Переробили для дозавантаження постів при скролі:
+      // setPosts2(response.data);
+      setPosts2([...posts2, ...response.data]);
       const totaLCount = response.headers['x-total-count'];
       setTotalPages(getPageCount(totaLCount, limit));
    });
    console.log(totalPages);
 
    // Додаємо хук для передзавантаження постів: ---------------------------------------------------------------------------------------------------
+   useObserver(lastElement, page < totalPages, isPostLoading, () => {
+      setPage(page + 1);
+   });
 
    useEffect(() => {
       console.log('Хука спрацювала тільки раз з пустими залежностями []');
+      // fetchPosts();
       fetchPosts();
    }, [page]);
 
@@ -173,18 +186,18 @@ function Posts() {
          {postError && <h1>Сталася помилка: {postError}</h1>}
 
          {/* Додаємо умову малювання крутілкі завантаження */}
-         {isPostLoading ? (
-            <Loader />
-         ) : (
-            // Компонент малювання постів
-            <PostList
-               // Передаємо функцію як посилання, беж дужок ()
-               remove={removePost}
-               // Малює миттєво вже отсортований масив, або селектом або пошуком
-               posts={sortAndSearchPosts}
-               title="Пости про Python"
-            />
-         )}
+         {isPostLoading && <Loader />}
+
+         {/* Компонент малювання постів */}
+         <PostList
+            // Передаємо функцію як посилання, беж дужок ()
+            remove={removePost}
+            // Малює миттєво вже отсортований масив, або селектом або пошуком
+            posts={sortAndSearchPosts}
+            title="Пости про Python"
+         />
+         <div ref={lastElement} style={{ height: 20, background: 'red' }}></div>
+
          <Pagination
             totalPages={totalPages}
             page={page}
