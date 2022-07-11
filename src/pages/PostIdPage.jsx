@@ -20,15 +20,18 @@ const PostIdPage = () => {
    const [fetchComments, isComentLoading, comError] = useFetching(async () => {
       const response = await PostService.getComment(params.id);
       setComments(response.data);
-      console.log(comments);
+      console.group('Отримали коменти поста:');
       console.log(response.data);
+      console.groupEnd();
    });
 
    // Записуємо константу, використовуючи наш хук, який поверне 3 параметра:
    const [fetchPostById, isLoading, error] = useFetching(async () => {
       const response = await PostService.getById(params.id);
       setPost(response.data);
-      console.log(post);
+      console.group('Отримали окремий пост:');
+      console.log(response.data);
+      console.groupEnd();
    });
 
    // Отримуємо дані на перше малювання компонента:
@@ -40,7 +43,7 @@ const PostIdPage = () => {
 
    return (
       <div>
-         <h1>Ви потрапили на сторінку поста з id: {params.id}</h1>
+         {/* <h1>Ви потрапили на сторінку поста з id: {params.id}</h1> */}
 
          {error && <h1>Сталася помилка: {error}</h1>}
          {isLoading ? (

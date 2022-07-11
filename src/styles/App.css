@@ -67,13 +67,24 @@
 .navbar {
    height: 50px;
    width: 100vw;
-   display: flex;
 
-   align-items: center;
-   padding: 0 15px;
-   background-color: lightgrey;
+   padding: 0 10px;
+   background-color: rgb(228, 226, 226);
 }
 
-.navbar__links {
-   margin-left: auto;
+.navbar__body {
+   height: 50px;
+   max-width: 800px;
+   margin: 0 auto;
+   display: flex;
+
+   justify-content: space-between;
+   align-items: center;
+}
+
+.navbar__links a {
+   margin: 0px 14px 0px 0px;
+   text-decoration: none;
+   color: teal;
+   font-size: 18px;
 }

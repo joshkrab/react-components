@@ -2,11 +2,17 @@ import About from '../pages/About';
 import Login from '../pages/Login';
 import PostIdPage from '../pages/PostIdPage';
 import Posts from '../pages/Posts';
+import PostsScroll from '../pages/PostsScroll';
 
 export const privateRoutes = [
    {
       path: '/posts',
       component: Posts,
+      exact: true,
+   },
+   {
+      path: '/posts-scroll',
+      component: PostsScroll,
       exact: true,
    },
    {

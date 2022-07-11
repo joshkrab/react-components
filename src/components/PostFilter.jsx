@@ -13,7 +13,7 @@ const PostFilter = ({ filter, setFilter }) => {
             onChange={(event) =>
                setFilter({ ...filter, query: event.target.value })
             }
-            placeholder="Пошук..."
+            placeholder="Search by title..."
          />
 
          <MySelect

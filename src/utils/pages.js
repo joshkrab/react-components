@@ -12,9 +12,12 @@ export const usePages = (totalPages) => {
       for (let index = 0; index < totalPages; index++) {
          array.push(index + 1);
       }
-      console.log('Масив номерів сторінок: ' + array);
+
       return array;
    }, [totalPages]);
 
+   if (totalPages) {
+      // console.log('Масив номерів сторінок: ' + pageArray);
+   }
    return pageArray;
 };

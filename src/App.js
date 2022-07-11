@@ -13,8 +13,6 @@ function App() {
 
    // Перевіряємо стан в локал-сторедж, при завантаженні компонента:
    useEffect(() => {
-      console.log(localStorage);
-      console.log(localStorage.getItem('auth'));
       if (localStorage.getItem('auth')) {
          setIsAuth(true);
       }
