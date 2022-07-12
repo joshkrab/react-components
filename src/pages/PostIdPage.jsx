@@ -4,9 +4,12 @@ import { useParams } from 'react-router-dom';
 import PostService from '../API/PostService';
 import { useFetching } from '../hooks/useFetching';
 import Loader from '../components/UI/loader/Loader';
+import MyButton from '../components/UI/button/MyButton';
+import { useNavigate } from 'react-router-dom';
 
 const PostIdPage = () => {
    const params = useParams();
+   const navigate = useNavigate();
 
    // Цей параметр ми називаємо в адресі компонента Route path="posts/:id"
    // А назначаємо йому значення при визові onClick={() => router(`/posts/${props.post.id}`)}
@@ -42,15 +45,15 @@ const PostIdPage = () => {
    }, []);
 
    return (
-      <div>
+      <div className="post__page" style={{ padding: '0 20px' }}>
          {/* <h1>Ви потрапили на сторінку поста з id: {params.id}</h1> */}
 
          {error && <h1>Сталася помилка: {error}</h1>}
          {isLoading ? (
             <Loader />
          ) : (
-            <div>
-               <h1>
+            <div className="post__content" style={{ marginBottom: '20px' }}>
+               <h1 style={{ textAlign: 'center', margin: '10px 0 10px 0' }}>
                   Пост №{post.id}. {post.title}
                </h1>
                <p>{post.body}</p>
@@ -61,7 +64,7 @@ const PostIdPage = () => {
          {isComentLoading ? (
             <Loader />
          ) : (
-            <div>
+            <div className="post__com" style={{ marginBottom: '20px' }}>
                {comments.map((com) => (
                   <div key={com.id} style={{ marginTop: 12 }}>
                      <h2>{com.email}</h2>
@@ -70,6 +73,12 @@ const PostIdPage = () => {
                ))}
             </div>
          )}
+         <div
+            className="center__body"
+            style={{ textAlign: 'center', margin: '10px 0 10px 0' }}
+         >
+            <MyButton onClick={() => navigate(-1)}>Back</MyButton>
+         </div>
       </div>
    );
 };

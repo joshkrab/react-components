@@ -4,14 +4,21 @@
    box-sizing: border-box;
 }
 
+body {
+   width: 100%;
+   min-height: 100vh;
+}
+
 #root {
+   width: 100%;
+   min-height: 100vh;
    display: flex;
    align-items: center;
    flex-direction: column;
 }
 
 .app {
-   width: 800px;
+   max-width: 800px;
 }
 
 .post {
@@ -22,6 +29,9 @@
    justify-content: space-between;
    align-items: center;
 }
+.post__content {
+   padding: 0px 20px 0px 0px;
+}
 .post__btns {
    display: flex;
 }
@@ -30,6 +40,7 @@
    margin-right: 0.5rem;
 }
 
+/* Aniation ----------------------------------------------------------------------------------------------------------------- */
 /* Початок анімації: */
 .post-enter {
    transform: translate(-350px);
@@ -50,17 +61,27 @@
 
 /* Стилі кнопок пагінації ------------------------------------------------------------------------------------------------ */
 .page__wrapper {
-   margin: 20px 0px 0px 0px;
+   margin: 20px 0px 20px 0px;
    display: flex;
 }
 .page {
-   padding: 10px;
+   display: inline-block;
+   width: 30px;
+   height: 30px;
+   text-align: center;
+   line-height: 30px;
    border: 1px solid teal;
    cursor: pointer;
+}
+.page:hover {
+   border: 2px solid rgb(1, 175, 175);
 }
 .page__current {
    border: 2px solid orange;
    font-weight: bold;
+}
+.page__current:hover {
+   border: 2px solid orange;
 }
 
 /* Панель навігації ------------------------------------------------------------------------------------------------------------------- */
@@ -87,4 +108,90 @@
    text-decoration: none;
    color: teal;
    font-size: 18px;
+}
+
+.navbar__links a:hover {
+   color: rgb(1, 175, 175);
+}
+
+/* Get posts --------------------------------------------------------------------------------------------------------- */
+.getposts__body {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+/* Login page ---------------------------------------------------------------------------------------------------------- */
+.login {
+   text-align: center;
+   width: 100%;
+   min-height: 100vh;
+   background-color: rgb(228, 226, 226);
+
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.login__body {
+   width: 50%;
+}
+.about-input {
+   min-width: 360px;
+   margin: 0px 0px 30px 0px;
+}
+.input-value {
+   max-width: 100%;
+}
+
+@media (max-width: 840px) {
+   .app {
+      padding: 0 20px;
+      box-sizing: border-box;
+   }
+}
+@media (max-width: 700px) {
+   .getposts__body p {
+      font-size: 12px;
+      width: 140px;
+   }
+   .post-list__title {
+      font-size: 18px;
+   }
+   .page__wrapper {
+      flex-wrap: wrap;
+   }
+   .post {
+      flex-direction: column;
+      height: 240px;
+   }
+   .post__content {
+      padding: 0;
+   }
+   .post__content h1 {
+      font-size: 22px;
+   }
+
+   .post__content strong {
+      margin: 0px 0px 20px 0px;
+   }
+}
+@media (max-width: 500px) {
+   .login__body {
+      width: 100%;
+      padding: 10px;
+   }
+   .login__body h1 {
+      font-size: 24px;
+   }
+   .navbar__links a {
+      font-size: 14px;
+   }
+   .input-value {
+      font-size: 22px;
+   }
+   .about-input {
+      min-width: 250px;
+      max-width: 250px;
+   }
 }

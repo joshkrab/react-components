@@ -1,5 +1,6 @@
 // rfc або rfce - скорочення створення
 import React, { useState } from 'react';
+import MyButton from './UI/button/MyButton';
 
 const Counter = () => {
    // Створюємо стан змінної, щоб реакт розумів, що відбулись зміни, та треба перемалювати компонент:
@@ -18,8 +19,8 @@ const Counter = () => {
    return (
       <div>
          <h1>{likes}</h1>
-         <button onClick={increment}>Increment</button>
-         <button onClick={decrement}>Decrement</button>
+         <MyButton onClick={increment}>Increment</MyButton>
+         <MyButton onClick={decrement}>Decrement</MyButton>
       </div>
    );
 };

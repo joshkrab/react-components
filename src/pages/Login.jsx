@@ -17,13 +17,16 @@ const Login = () => {
    };
 
    return (
-      <div>
-         <h1>Сторінка для логіна:</h1>
-         <form onSubmit={login}>
-            <MyInput type="text" placeholder="Input your login" />
-            <MyInput type="password" placeholder="Input your password" />
-            <MyButton>Enter</MyButton>
-         </form>
+      <div className="login">
+         <div className="login__body">
+            <h1>Input your login and password:</h1>
+            <p>(Any data)</p>
+            <form onSubmit={login}>
+               <MyInput type="text" placeholder="Input your login" />
+               <MyInput type="password" placeholder="Input your password" />
+               <MyButton>Enter</MyButton>
+            </form>
+         </div>
       </div>
    );
 };

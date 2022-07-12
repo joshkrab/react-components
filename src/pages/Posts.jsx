@@ -39,7 +39,7 @@ function Posts() {
    // const [body, setBody] = useState('');
 
    const createPost = (newPost) => {
-      newPost.id = posts2.length + 1;
+      newPost.id = posts2[posts2.length - 1].id + 1;
       setPosts2([...posts2, newPost]);
       setModal(false);
    };
@@ -154,8 +154,11 @@ function Posts() {
                setPosts(posts);
             }}> Add Js Post </button> */}
 
-         <hr style={{ margin: '15px 0' }} />
-         <button onClick={fetchPosts}>GET POSTS</button>
+         {/* <hr style={{ margin: '15px 0' }} /> */}
+         <div className="getposts__body" style={{ margin: '15px 0' }}>
+            <p>Якщо пости не завантажилися - натисни:</p>
+            <MyButton onClick={fetchPosts}>GET POSTS</MyButton>
+         </div>
          <hr style={{ margin: '15px 0' }} />
 
          <MyButton onClick={() => setModal(true)}>Додати пост</MyButton>
@@ -172,17 +175,17 @@ function Posts() {
          {/* <hr style={{ margin: '15px 0' }} /> */}
          {/* Компонент сортування та інпут фільтрації */}
          <PostFilter filter={filter} setFilter={setFilter} />
-
+         <p style={{ marginTop: '20px' }}>Кількість елементів на сторінці:</p>
          {/* Додаємо селект ліміта постів */}
          <MySelect
             value={limit}
             onChange={(value) => setLimit(value)}
-            defaultValue="Кількість елементів на сторінці"
+            defaultValue="page limit"
             options={[
                { value: 5, name: '5' },
                { value: 10, name: '10' },
                { value: 20, name: '20' },
-               { value: -1, name: 'Show all' },
+               { value: 100, name: 'Show all' },
             ]}
          />
 
@@ -191,7 +194,11 @@ function Posts() {
 
          {/* Додаємо умову малювання крутілкі завантаження */}
          {isPostLoading && <Loader />}
-
+         <Pagination
+            totalPages={totalPages}
+            page={page}
+            changePage={changePage}
+         />
          {/* Компонент малювання постів */}
          <PostList
             // Передаємо функцію як посилання, беж дужок ()

@@ -8,9 +8,15 @@ const PostItem = (props) => {
    return (
       <div className="post">
          <div className="post__content">
-            <strong style={{ fontSize: '20px', fontWeight: '800' }}>
+            <strong
+               style={{
+                  fontSize: '20px',
+                  fontWeight: '800',
+               }}
+            >
                {props.post.id}.{props.post.title}
             </strong>
+            <hr style={{ marginBottom: '14px' }} />
             <div>{props.post.body}</div>
          </div>
          <div className="post__btns">

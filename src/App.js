@@ -23,7 +23,7 @@ function App() {
       // Огорнули усе в контекст, та передали наші змінні туди у пропси
       <AuthContext.Provider value={{ isAuth, setIsAuth, isLoading }}>
          <BrowserRouter>
-            <Navbar />
+            {isAuth && <Navbar />}
             <AppRouter />
          </BrowserRouter>
       </AuthContext.Provider>

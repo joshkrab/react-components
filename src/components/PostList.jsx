@@ -12,7 +12,12 @@ const PostList = ({ remove, posts, title }) => {
       <div>
          {/* Робота зі стилями: */}
          {/* <PostItem post={{ id: 1, title: 'javaScript', body: 'description' }} /> */}
-         <h1 style={{ textAlign: 'center' }}>{title}</h1>
+         <h1
+            className="post-list__title"
+            style={{ textAlign: 'center', marginTop: '20px' }}
+         >
+            {title}
+         </h1>
 
          {/* Завертаємо наш список постів в компонент TransitionGroup для анімації */}
          <TransitionGroup>

@@ -69,8 +69,12 @@ function PostsScroll() {
 
    return (
       <div className="app">
-         <hr style={{ margin: '15px 0' }} />
-         <button onClick={fetchPosts}>GET POSTS</button>
+         {/* <hr style={{ margin: '15px 0' }} /> */}
+         <div className="getposts__body" style={{ margin: '15px 0' }}>
+            <p>Довантаження постів при скролі вниз</p>
+            <MyButton onClick={fetchPosts}>GET POSTS</MyButton>
+         </div>
+
          <hr style={{ margin: '15px 0' }} />
 
          <MyButton onClick={() => setModal(true)}>Додати пост</MyButton>
@@ -113,7 +117,7 @@ function PostsScroll() {
             remove={removePost}
             // Малює миттєво вже отсортований масив, або селектом або пошуком
             posts={sortAndSearchPosts}
-            title="Пости про Python"
+            title="Пости про Python (Loading posts when scrolling down)"
          />
          <div
             ref={lastElement}
