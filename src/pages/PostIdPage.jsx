@@ -1,11 +1,10 @@
 // rfc
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import PostService from '../API/PostService';
 import { useFetching } from '../hooks/useFetching';
 import Loader from '../components/UI/loader/Loader';
 import MyButton from '../components/UI/button/MyButton';
-import { useNavigate } from 'react-router-dom';
 
 const PostIdPage = () => {
    const params = useParams();
